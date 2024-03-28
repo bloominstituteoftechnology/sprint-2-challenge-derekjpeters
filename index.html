@@ -181,7 +181,21 @@ console.log(scrub("aces high", ["high", "aces", "hearts"])); // Expected Output:
 console.log(scrub("", ["high", "aces"])); // Expected Output: ""
 
 			// 👉 CHALLENGE 5 (bonus, NOT graded)
-			function normalizePhoneNumber(num) {}
+			function normalizePhoneNumber(num) {
+  // Assuming num is always 10 characters long as per the requirement
+  return "(" + num.substring(0, 3) + ") " + num.substring(3, 6) + "-" + num.substring(6);
+}
+
+// Example Usage
+
+// Example 1
+console.log(normalizePhoneNumber("9876543210"));
+// Expected Output: "(987) 654-3210"
+
+// Example 2
+console.log(normalizePhoneNumber("1111111111"));
+// Expected Output: "(111) 111-1111"
+
 
 			// 👉 CHALLENGE 6 (bonus, NOT graded)
 			function diceRolls() {}
