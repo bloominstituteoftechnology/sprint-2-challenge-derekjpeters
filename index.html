@@ -53,8 +53,39 @@ console.log(profileActivation(testProfile3));
 
     // 👉 CHALLENGE 2
     function mineSweeper(grid, x, y) {
+  // Check if the coordinates are out of bounds
+  if (x < 1 || x > 3 || y < 1 || y > 3) {
+    return "invalid coordinates";
+  }
 
-    }
+  // Adjust for array indexing starting at 0
+  const gridValue = grid[y - 1][x - 1];
+
+  // Determine and return the result based on the grid value
+  if (gridValue === "🟥") {
+    return "🟥 💀"; // Landed on a mine
+  } else if (gridValue === "🟦") {
+    return "🟦 🥳"; // Landed on a safe spot
+  }
+}
+
+// Example Usage
+
+// Example 1: Landing on a Mine
+let grid1 = [["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]];
+console.log(mineSweeper(grid1, 1, 1));
+// Expected Output: "🟥 💀"
+
+// Example 2: Landing on a Safe Spot
+let grid2 = [["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]];
+console.log(mineSweeper(grid2, 2, 3));
+// Expected Output: "🟦 🥳"
+
+// Example 3: Invalid Coordinates
+let grid3 = [["🟥", "🟦", "🟥"], ["🟦", "🟥", "🟥"], ["🟥", "🟦", "🟦"]];
+console.log(mineSweeper(grid3, 4, 1));
+// Expected Output: "invalid coordinates"
+
 
     // 👉 CHALLENGE 3
     function booleanize(obj) {
