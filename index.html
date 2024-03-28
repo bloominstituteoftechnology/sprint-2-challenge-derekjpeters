@@ -6,8 +6,50 @@
   <script id="challenge">
     // 👉 CHALLENGE 1
     function profileActivation(profile, reason) {
-
+  // Check if the profile is currently active
+  if (profile.active) {
+    // If trying to deactivate without a reason, prompt for manual confirmation
+    if (reason === undefined) {
+      return "confirm status manually";
+    } else {
+      // Deactivate the profile and set the reason
+      profile.active = false;
+      profile.reason = reason;
     }
+  } else {
+    // Activate the profile and remove the reason
+    profile.active = true;
+    delete profile.reason; // This removes the reason property
+  }
+  return profile;
+}
+
+// Example Usage
+
+// Example 1: Activating a Profile
+let testProfile1 = {
+  active: false,
+  reason: "Not logged in for 30 days"
+};
+console.log(profileActivation(testProfile1));
+
+// Expected Output: { active: true }
+
+// Example 2: Deactivating a Profile
+let testProfile2 = {
+  active: true
+};
+console.log(profileActivation(testProfile2, "Not logged in for 30 days"));
+
+// Expected Output: { active: false, reason: "Not logged in for 30 days"}
+
+// Example 3: Missing Reason on Active Profile
+let testProfile3 = {
+  active: true
+};
+console.log(profileActivation(testProfile3));
+
+// Expected Output: "confirm status manually"
 
     // 👉 CHALLENGE 2
     function mineSweeper(grid, x, y) {
