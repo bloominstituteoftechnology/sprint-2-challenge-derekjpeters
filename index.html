@@ -142,63 +142,92 @@
 
 			// 👉 CHALLENGE 4
 			function scrub(text, forbidden) {
-  // If text is empty or no forbidden words are provided, return the original text
-  if (text === "" || forbidden.length === 0) {
-    return text;
-  }
+				// If text is empty or no forbidden words are provided, return the original text
+				if (text === "" || forbidden.length === 0) {
+					return text;
+				}
 
-  // Split the text into an array of words
-  let words = text.split(" ");
+				// Split the text into an array of words
+				let words = text.split(" ");
 
-  // Iterate over each word in the text
-  for (let i = 0; i < words.length; i++) {
-    // Check if the current word is in the forbidden list
-    if (forbidden.includes(words[i])) {
-      // Replace the forbidden word with "x" characters
-      words[i] = "x".repeat(words[i].length);
-    }
-  }
+				// Iterate over each word in the text
+				for (let i = 0; i < words.length; i++) {
+					// Check if the current word is in the forbidden list
+					if (forbidden.includes(words[i])) {
+						// Replace the forbidden word with "x" characters
+						words[i] = "x".repeat(words[i].length);
+					}
+				}
 
-  // Join the modified words back into a string and return
-  return words.join(" ");
-}
+				// Join the modified words back into a string and return
+				return words.join(" ");
+			}
 
-// Example Usage
+			// Example Usage
 
-// Example 1
-console.log(scrub("out of the silent planet", ["of", "silent"])); // Expected Output: "out xx the xxxxxx planet"
+			// Example 1
+			console.log(scrub("out of the silent planet", ["of", "silent"])); // Expected Output: "out xx the xxxxxx planet"
 
-// Example 2
-console.log(scrub("the ghost of the navigator", ["the"])); // Expected Output: "xxx ghost of xxx navigator"
+			// Example 2
+			console.log(scrub("the ghost of the navigator", ["the"])); // Expected Output: "xxx ghost of xxx navigator"
 
-// Example 3
-console.log(scrub("lost somewhere in time", [])); // Expected Output: "lost somewhere in time"
+			// Example 3
+			console.log(scrub("lost somewhere in time", [])); // Expected Output: "lost somewhere in time"
 
-// Example 4
-console.log(scrub("aces high", ["high", "aces", "hearts"])); // Expected Output: "xxxx xxxx"
+			// Example 4
+			console.log(scrub("aces high", ["high", "aces", "hearts"])); // Expected Output: "xxxx xxxx"
 
-// Example 5
-console.log(scrub("", ["high", "aces"])); // Expected Output: ""
+			// Example 5
+			console.log(scrub("", ["high", "aces"])); // Expected Output: ""
 
 			// 👉 CHALLENGE 5 (bonus, NOT graded)
 			function normalizePhoneNumber(num) {
-  // Assuming num is always 10 characters long as per the requirement
-  return "(" + num.substring(0, 3) + ") " + num.substring(3, 6) + "-" + num.substring(6);
-}
+				// Assuming num is always 10 characters long as per the requirement
+				return (
+					"(" +
+					num.substring(0, 3) +
+					") " +
+					num.substring(3, 6) +
+					"-" +
+					num.substring(6)
+				);
+			}
 
-// Example Usage
+			// Example Usage
 
-// Example 1
-console.log(normalizePhoneNumber("9876543210"));
-// Expected Output: "(987) 654-3210"
+			// Example 1
+			console.log(normalizePhoneNumber("9876543210"));
+			// Expected Output: "(987) 654-3210"
 
-// Example 2
-console.log(normalizePhoneNumber("1111111111"));
-// Expected Output: "(111) 111-1111"
-
+			// Example 2
+			console.log(normalizePhoneNumber("1111111111"));
+			// Expected Output: "(111) 111-1111"
 
 			// 👉 CHALLENGE 6 (bonus, NOT graded)
-			function diceRolls() {}
+			function diceRolls() {
+				let totalRolls = 0;
+				let consecutiveSixes = 0;
+
+				while (true) {
+					let roll = Math.floor(Math.random() * 6) + 1; // Generate a random number between 1 and 6
+					totalRolls++; // Increment the total number of rolls
+
+					if (roll === 6) {
+						consecutiveSixes++; // Increment consecutive sixes if a six is rolled
+						if (consecutiveSixes === 3) {
+							break; // Exit the loop if three consecutive sixes are rolled
+						}
+					} else {
+						consecutiveSixes = 0; // Reset the consecutive sixes counter if a six is not rolled
+					}
+				}
+
+				return totalRolls;
+			}
+
+			// Let's simulate the dice rolls to see how many it takes to get three consecutive sixes.
+			let result = diceRolls(6);
+			console.log(result);
 
 			// 🧪 DO NOT make any changes below this line ===================
 			globalThis.challengeVersion = 1;
