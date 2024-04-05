@@ -5,19 +5,30 @@
 		<script id="challenge">
 			// 👉 CHALLENGE 1
 			function profileActivation(profile, reason) {
-				if (profile.active && reason === undefined) {
-					return "confirm status manually";
-				} else {
-					profile.active = !profile.active; // Toggle the active status
-					profile.reason = profile.active ? undefined : reason; // Set or clear the reason
+				// Check if 'active' property is missing.
+				if (profile.active === undefined) {
+					return "impossible to ascertain status";
 				}
 
+				// Check if the profile is active and no reason is provided for deactivation.
+				if (profile.active && reason === undefined) {
+					return "confirm status manually";
+				}
+
+				// Toggle the active state of the profile.
+				profile.active = !profile.active;
+
+				// If deactivating, set the reason; otherwise, remove it.
 				if (!profile.active) {
-					// When deactivating, we need to explicitly set the reason
-					profile.reason = reason;
+					// When deactivating, if no reason is provided, prompt for manual confirmation.
+					if (reason === undefined) {
+						profile.active = !profile.active; // Revert active state change
+						return "confirm status manually";
+					} else {
+						profile.reason = reason; // Set the deactivation reason.
+					}
 				} else {
-					// When activating, ensure the reason is removed
-					delete profile.reason;
+				delete profile.reason; // Activation: ensure the reason is removed.
 				}
 
 				return profile;
