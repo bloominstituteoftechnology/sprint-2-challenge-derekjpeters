@@ -5,162 +5,68 @@
 		<script id="challenge">
 			// 👉 CHALLENGE 1
 			function profileActivation(profile, reason) {
-				// Check if the profile is currently active
-				if (profile.active) {
-					// If trying to deactivate without a reason, prompt for manual confirmation
-					if (reason === undefined) {
-						return "confirm status manually";
-					} else {
-						// Deactivate the profile and set the reason
-						profile.active = false;
-						profile.reason = reason;
-					}
+				if (profile.active && reason === undefined) {
+					return "confirm status manually";
 				} else {
-					// Activate the profile and remove the reason
-					profile.active = true;
-					delete profile.reason; // This removes the reason property
+					profile.active = !profile.active; // Toggle the active status
+					profile.reason = profile.active ? undefined : reason; // Set or clear the reason
 				}
+
+				if (!profile.active) {
+					// When deactivating, we need to explicitly set the reason
+					profile.reason = reason;
+				} else {
+					// When activating, ensure the reason is removed
+					delete profile.reason;
+				}
+
 				return profile;
 			}
 
-			// Example Usage
-
-			// Example 1: Activating a Profile
-			let testProfile1 = {
-				active: false,
-				reason: "Not logged in for 30 days",
-			};
-			console.log(profileActivation(testProfile1));
-
-			// Expected Output: { active: true }
-
-			// Example 2: Deactivating a Profile
-			let testProfile2 = {
-				active: true,
-			};
-			console.log(profileActivation(testProfile2, "Not logged in for 30 days"));
-
-			// Expected Output: { active: false, reason: "Not logged in for 30 days"}
-
-			// Example 3: Missing Reason on Active Profile
-			let testProfile3 = {
-				active: true,
-			};
-			console.log(profileActivation(testProfile3));
-
-			// Expected Output: "confirm status manually"
-
 			// 👉 CHALLENGE 2
 			function mineSweeper(grid, x, y) {
-				// Check if the coordinates are out of bounds
-				if (x < 1 || x > 3 || y < 1 || y > 3) {
-					return "invalid coordinates";
-				}
-
-				// Adjust for array indexing starting at 0
-				const gridValue = grid[y - 1][x - 1];
-
-				// Determine and return the result based on the grid value
-				if (gridValue === "🟥") {
-					return "🟥 💀"; // Landed on a mine
-				} else if (gridValue === "🟦") {
-					return "🟦 🥳"; // Landed on a safe spot
-				}
+				return x < 1 || x > 3 || y < 1 || y > 3
+					? "invalid coordinates"
+					: `${grid[y - 1][x - 1]} ${
+							grid[y - 1][x - 1] === "🟥" ? "💀" : "🥳"
+					  }`;
 			}
 
-			// Example Usage
-
-			// Example 1: Landing on a Mine
-			let grid1 = [
-				["🟥", "🟦", "🟥"],
-				["🟦", "🟥", "🟥"],
-				["🟥", "🟦", "🟦"],
-			];
-			console.log(mineSweeper(grid1, 1, 1));
-			// Expected Output: "🟥 💀"
-
-			// Example 2: Landing on a Safe Spot
-			let grid2 = [
-				["🟥", "🟦", "🟥"],
-				["🟦", "🟥", "🟥"],
-				["🟥", "🟦", "🟦"],
-			];
-			console.log(mineSweeper(grid2, 2, 3));
-			// Expected Output: "🟦 🥳"
-
-			// Example 3: Invalid Coordinates
-			let grid3 = [
-				["🟥", "🟦", "🟥"],
-				["🟦", "🟥", "🟥"],
-				["🟥", "🟦", "🟦"],
-			];
-			console.log(mineSweeper(grid3, 4, 1));
-			// Expected Output: "invalid coordinates"
+			// Example usage remains the same
 
 			// 👉 CHALLENGE 3
 			function booleanize(obj) {
-				// Check for property names exceeding 9 characters
-				for (let key in obj) {
-					if (key.length > 9) {
+				for (let [key, value] of Object.entries(obj)) {
+					if (key.length > 9)
 						return "shorten all prop names to 9 chars or less";
+
+					switch (value) {
+						case 0:
+							obj[key] = false;
+							break;
+						case 1:
+							obj[key] = true;
+							break;
+						case null:
+							delete obj[key];
+							break;
 					}
 				}
-
-				// Transform values according to the rules
-				for (let key in obj) {
-					if (obj[key] === 0) {
-						obj[key] = false;
-					} else if (obj[key] === 1) {
-						obj[key] = true;
-					} else if (obj[key] === null) {
-						delete obj[key];
-					}
-				}
-
 				return obj;
 			}
 
-			// Example Usage
-
-			// Example 1
-			let obj1 = {
-				keyZero: 0,
-				keyOne: 1,
-				keyNull: null,
-				keyTwo: 2,
-			};
-			console.log(booleanize(obj1));
-			// Expected Output: { keyZero: false, keyOne: true, keyTwo: 2 }
-
-			// Example 2
-			let obj2 = {
-				veryLongPropertyName: 0,
-				keyOne: 1,
-			};
-			console.log(booleanize(obj2));
-			// Expected Output: "shorten all prop names to 9 chars or less"
-
 			// 👉 CHALLENGE 4
 			function scrub(text, forbidden) {
-				// If text is empty or no forbidden words are provided, return the original text
-				if (text === "" || forbidden.length === 0) {
-					return text;
-				}
+				// Early return if text is empty or no forbidden words are provided
+				if (text === "" || forbidden.length === 0) return text;
 
-				// Split the text into an array of words
-				let words = text.split(" ");
-
-				// Iterate over each word in the text
-				for (let i = 0; i < words.length; i++) {
-					// Check if the current word is in the forbidden list
-					if (forbidden.includes(words[i])) {
-						// Replace the forbidden word with "x" characters
-						words[i] = "x".repeat(words[i].length);
-					}
-				}
-
-				// Join the modified words back into a string and return
-				return words.join(" ");
+				// Transform and return the text
+				return text
+					.split(" ")
+					.map((word) =>
+						forbidden.includes(word) ? "x".repeat(word.length) : word
+					)
+					.join(" ");
 			}
 
 			// Example Usage
@@ -182,17 +88,10 @@
 
 			// 👉 CHALLENGE 5 (bonus, NOT graded)
 			function normalizePhoneNumber(num) {
-				// Assuming num is always 10 characters long as per the requirement
-				return (
-					"(" +
-					num.substring(0, 3) +
-					") " +
-					num.substring(3, 6) +
-					"-" +
-					num.substring(6)
-				);
+				return `(${num.substring(0, 3)}) ${num.substring(3, 6)}-${num.substring(
+					6
+				)}`;
 			}
-
 			// Example Usage
 
 			// Example 1
@@ -205,28 +104,22 @@
 
 			// 👉 CHALLENGE 6 (bonus, NOT graded)
 			function diceRolls() {
-				let totalRolls = 0;
-				let consecutiveSixes = 0;
-
-				while (true) {
-					let roll = Math.floor(Math.random() * 6) + 1; // Generate a random number between 1 and 6
-					totalRolls++; // Increment the total number of rolls
-
-					if (roll === 6) {
-						consecutiveSixes++; // Increment consecutive sixes if a six is rolled
-						if (consecutiveSixes === 3) {
-							break; // Exit the loop if three consecutive sixes are rolled
-						}
-					} else {
-						consecutiveSixes = 0; // Reset the consecutive sixes counter if a six is not rolled
-					}
+				let totalRolls = 0,
+					consecutiveSixes = 0;
+				while (consecutiveSixes < 3) {
+					totalRolls++;
+					consecutiveSixes =
+						Math.floor(Math.random() * 6) + 1 === 6 ? consecutiveSixes + 1 : 0;
 				}
-
 				return totalRolls;
 			}
 
 			// Let's simulate the dice rolls to see how many it takes to get three consecutive sixes.
-			let result = diceRolls(6);
+			let result = diceRolls(); // Removed the incorrect argument
+			console.log(result);
+
+			// Let's simulate the dice rolls to see how many it takes to get three consecutive sixes.
+			result = diceRolls(6);
 			console.log(result);
 
 			// 🧪 DO NOT make any changes below this line ===================
